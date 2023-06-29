@@ -20,7 +20,7 @@ def upload():
     # Validación del archivo 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(filename) # El archivo se guarda en la misma ubicación que el archivo app.py
+        file.save(os.path.join('uploads', filename))  # Guardar el archivo en la carpeta "uploads"
         return {'message': 'Archivo subido exitosamente.'}
     else:
         return jsonify({'message': 'Error al subir el archivo. Asegúrate de que sea un archivo con el fomato válido.'}), 400
