@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compresor de Archivos</title>
+</head>
+<body>
+    <h1>Compresor de Archivos</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file">
+        <button type="submit">Subir Archivo</button>
+    </form>
+    <div id="success-message" style="display: none;"></div>
+    <div id="error-message" style="display: none;"></div>
+
+
+    <div id="loading" style="display: none;">Cargando...</div>
+    <button id="compress-btn" disabled>Comprimir Archivo</button>
+    <!-- Aquí se muestra el enlace de descarga proporcionado por el backend -->
+    <div id="download-link" style="display: none;">
+        <a id="download-btn" href="#" download>Descargar Archivo Comprimido</a>
+    </div>
+    <button id="delete-btn" style="display: none;">Eliminar Archivo Comprimido</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
