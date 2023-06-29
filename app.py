@@ -1,4 +1,5 @@
 import os
+import zipfile
 from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
 
@@ -28,22 +29,48 @@ def upload():
 
 @app.route('/compress', methods=['POST'])
 def compress():
-    # Aquí debes implementar la lógica para comprimir el archivo.
-    # Utiliza el módulo 'zipfile' de Python para crear el archivo comprimido.
-    # Puedes agregar mensajes de registro en la consola para seguir el progreso.
+    # Obtener el archivo del formulario
+    file = request.files['file']
+
+    # Verificar si se seleccionó un archivo
+    if file.filename == '':
+        return jsonify({'message': 'No se ha seleccionado ningún archivo.'}), 400
+
+    # Ruta del archivo comprimido
+    zip_filename = os.path.join('uploads', 'compressed.zip')
+
+    # Crear el archivo comprimido
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        zipf.writestr(file.filename, file.read())
+
     return {'download_url': '/download'}
 
 @app.route('/download')
 def download():
-    # Aquí debes devolver el archivo comprimido al usuario para descargarlo.
-    # Utiliza el método 'send_file' de Flask y proporciona la ubicación del archivo comprimido.
-    return send_file('compressed.zip', as_attachment=True)
+    # Obtener la ruta del archivo comprimido
+    zip_filename = os.path.join('uploads', 'compressed.zip')
+
+    # Verificar si el archivo comprimido existe
+    if os.path.exists(zip_filename):
+        return send_file(zip_filename, as_attachment=True)
+    else:
+        return jsonify({'message': 'El archivo comprimido no existe.'}), 404
+
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    # Aquí debes eliminar el archivo comprimido del servidor.
-    # Utiliza la función 'os.remove' de Python para eliminar el archivo.
-    return {'message': 'Archivo comprimido eliminado.'}
+    # Obtener la ruta del archivo comprimido
+    zip_filename = os.path.join('uploads', 'compressed.zip')
+
+    # Verificar si el archivo comprimido existe
+    if os.path.exists(zip_filename):
+        # Eliminar el archivo comprimido
+        os.remove(zip_filename)
+
+        return {'message': 'Archivo comprimido eliminado.'}
+    else:
+        return jsonify({'message': 'El archivo comprimido no existe.'}), 404
+
 
 if __name__ == '__main__':
     app.run()
