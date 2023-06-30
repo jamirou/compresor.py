@@ -79,8 +79,6 @@ $('#compress-btn').click(function() {
     });
 });
 
-
-
     $('#delete-btn').click(function() {
         $.ajax({
             url: '/delete',
