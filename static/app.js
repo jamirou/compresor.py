@@ -38,17 +38,13 @@ $(document).ready(function() {
 $('#compress-btn').click(function() {
     // Mostrar el mensaje de carga
     $('#loading').show();
-
     // Deshabilitar el botón "Comprimir Archivo"
     $('#compress-btn').prop('disabled', true);
-
     // Obtener el archivo seleccionado
     var file = $('#file-input').prop('files')[0];
-
     // Crear un objeto FormData y agregar el archivo
     var formData = new FormData();
     formData.append('file', file);
-
     // Realizar una solicitud POST al endpoint '/compress'
     $.ajax({
         url: '/compress',
@@ -57,9 +53,11 @@ $('#compress-btn').click(function() {
         processData: false,
         contentType: false,
         success: function(response) {
-            // Ocultar el mensaje de carga
             $('#loading').hide();
-
+            if (response.message) {
+                $('#success-message').text(response.message);
+                $('#success-message').show();
+            }
             // Mostrar el enlace de descarga proporcionado por el backend
             $('#download-link').show();
             $('#download-btn').attr('href', response.download_url);
@@ -87,6 +85,9 @@ $('#compress-btn').click(function() {
                 $('#compress-btn').prop('disabled', true);
                 $('#download-link').hide();
                 $('#delete-btn').hide();
+                // Limpiar el campo de entrada de archivos
+                $('#file-input').val('');
+                $('#success-message').hide();
             }
         });
     });

@@ -1,6 +1,7 @@
 import os
 import zipfile
 import shutil
+import zlib
 from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
 
@@ -38,6 +39,7 @@ def upload():
 @app.route('/compress', methods=['POST'])
 def compress():
     global compressed_file  # Acceder a la variable global
+
     # Obtener el archivo del formulario
     file = request.files['file']
     # Verificar si se seleccionó un archivo
@@ -51,15 +53,15 @@ def compress():
     original_filename = os.path.join('uploads', secure_filename(file.filename))
     # Guardar el archivo original en la carpeta "uploads"
     file.save(original_filename)
-    # Comprimir el archivo
-    shutil.make_archive(os.path.splitext(original_filename)[0], 'zip', 'uploads', secure_filename(file.filename))
-    # Mover el archivo comprimido a la carpeta "uploads"
-    shutil.move(f'{os.path.splitext(original_filename)[0]}.zip', zip_filename)
+
+    # Crear el archivo ZIP con mayor compresión
+    with zipfile.ZipFile(zip_filename, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zipf:
+        zipf.write(original_filename, os.path.basename(original_filename))
+
     # Asignar el archivo comprimido a la variable global
     compressed_file = zip_filename
 
-    return {'download_url': '/download'}
-
+    return {'message': 'Successful compression.', 'download_url': '/download'}
 
 @app.route('/download')
 def download():
@@ -71,7 +73,7 @@ def download():
 
     # Enviar el archivo comprimido como descarga
     return send_file(compressed_file, as_attachment=True)
-
+    
 @app.route('/delete', methods=['POST'])
 def delete():
     global compressed_file  # Acceder a la variable global
