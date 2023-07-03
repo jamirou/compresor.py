@@ -1,0 +1,148 @@
+/* Estilos generales */
+body {
+  background-color: #C2DEDC;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  margin-top: 200px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 48px;
+  color: #116A7B;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Estilos del formulario y mensajes */
+#upload-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.form-label {
+  color: #545B77;
+}
+
+.form-control {
+  background-color: #5C8984;
+  border-color: #545B77;
+  color: #D8D8D8;
+}
+
+.alert {
+  margin-bottom: 20px;
+  border-radius: 0;
+}
+
+.alert-success {
+  background-color: #116A7B;
+  color:  #2B2730;
+}
+
+.alert-danger {
+  background-color: #116A7B;
+  color: #2B2730;
+}
+
+/* Estilos del mensaje de carga */
+#loading {
+  margin-bottom: 20px;
+}
+
+/* Estilos de los botones */
+.btn {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 0;
+}
+
+.btn-primary {
+  background-color: #068DA9;
+  border-color: #245953;
+}
+
+.btn-success {
+  background-color: #068DA9;
+  border-color: #B5C99A;
+}
+
+.btn-danger {
+  background-color: #068DA9;
+  border-color: #245953;
+}
+
+/* Estilos del enlace de descarga */
+#download-link {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+#download-btn {
+  display: flex;
+  justify-content: center;
+  margin-right: 10px;
+  background-color: #5C8984;
+  border-color: #408E91;
+  border-radius: 0;
+}
+#download-btn:hover {
+  background-color: #116A7B;
+  color: #D8D8D8;
+}
+#delete-btn {
+  background-color: #5C8984;
+  border-color:#408E91 ;
+  justify-content: center;
+  display: flex;
+  margin-left: 10px;
+}
+#delete-btn:hover {
+  background-color: #116A7B;
+  color: #D8D8D8;
+}
+#compress-btn {
+  padding-left: 5px;
+  justify-content: center;
+  background: #408E91;
+  border-color: #D8D8D8;
+  border-radius: 0;
+
+}
+#compress-btn:hover {
+  background: #116A7B;
+  border-color: #333;
+}
+
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 8px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer .license {
+    margin-bottom: 0;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-icons a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 44px;
+    margin-left: 20px;
+}
+

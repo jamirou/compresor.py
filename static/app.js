@@ -63,7 +63,7 @@ $('#compress-btn').click(function() {
             // Mostrar el enlace de descarga proporcionado por el backend
             $('#download-link').show();
             $('#download-btn').attr('href', response.download_url);
-            $('#download-btn').text('Descargar Archivo Comprimido');
+            $('#download-btn').text('Download file');
 
             // Mostrar el botón "Eliminar Archivo Comprimido"
             $('#delete-btn').show();

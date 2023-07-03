@@ -1,5 +1,6 @@
 import os
 import zipfile
+import shutil
 from flask import Flask, request, send_file, jsonify
 from werkzeug.utils import secure_filename
 
@@ -29,32 +30,31 @@ def upload():
         filename = secure_filename(file.filename)
         file.save(os.path.join('uploads', filename))  # Guardar el archivo en la carpeta "uploads"
         uploaded_file = file  # Asignar el archivo a la variable global
-        return {'message': 'Archivo subido exitosamente.'}
+        return {'message': 'file successfully uploaded.'}
     else:
-        return jsonify({'message': 'Error al subir el archivo. Asegúrate de que sea un archivo con el fomato válido.'}), 400
+        return jsonify({'message': 'Error uploading file. Make sure it is a file with the valid format.'}), 400
 
 
 @app.route('/compress', methods=['POST'])
 def compress():
     global compressed_file  # Acceder a la variable global
-
     # Obtener el archivo del formulario
     file = request.files['file']
-
     # Verificar si se seleccionó un archivo
     if file.filename == '':
-        return jsonify({'message': 'No se ha seleccionado ningún archivo.'}), 400
-
+        return jsonify({'message': 'No files selected.'}), 400
     # Obtener el nombre del archivo original sin la extensión
     filename = os.path.splitext(file.filename)[0]
-
     # Ruta del archivo comprimido con el nombre del archivo original
     zip_filename = os.path.join('uploads', f'{filename}.zip')
-
-    # Crear el archivo comprimido
-    with zipfile.ZipFile(zip_filename, 'w') as zipf:
-        zipf.writestr(file.filename, file.read())
-
+    # Ruta del archivo original
+    original_filename = os.path.join('uploads', secure_filename(file.filename))
+    # Guardar el archivo original en la carpeta "uploads"
+    file.save(original_filename)
+    # Comprimir el archivo
+    shutil.make_archive(os.path.splitext(original_filename)[0], 'zip', 'uploads', secure_filename(file.filename))
+    # Mover el archivo comprimido a la carpeta "uploads"
+    shutil.move(f'{os.path.splitext(original_filename)[0]}.zip', zip_filename)
     # Asignar el archivo comprimido a la variable global
     compressed_file = zip_filename
 
@@ -67,7 +67,7 @@ def download():
 
   # Verificar si hay un archivo comprimido almacenado en la variable global
     if compressed_file is None:
-        return jsonify({'message': 'No hay archivo comprimido disponible.'}), 404
+        return jsonify({'message': 'No compressed file available.'}), 404
 
     # Enviar el archivo comprimido como descarga
     return send_file(compressed_file, as_attachment=True)
@@ -79,7 +79,7 @@ def delete():
 
     # Verificar si hay un archivo comprimido almacenado en la variable global
     if compressed_file is None:
-        return jsonify({'message': 'No hay archivo comprimido disponible.'}), 404
+        return jsonify({'message': 'No compressed file available.'}), 404
 
     # Eliminar el archivo comprimido
     os.remove(compressed_file)
@@ -87,7 +87,7 @@ def delete():
 
     # Verificar si hay un archivo subido almacenado en la variable global
     if uploaded_file is None:
-        return jsonify({'message': 'No hay archivo subido disponible.'}), 404
+        return jsonify({'message': 'No compressed file available.'}), 404
 
     # Obtener la ruta del archivo subido
     filename = os.path.join('uploads', secure_filename(uploaded_file.filename))
@@ -98,9 +98,9 @@ def delete():
         os.remove(filename)
         uploaded_file = None
 
-        return {'message': 'Archivos eliminados exitosamente.'}
+        return {'message': 'Successfully deleted files.'}
     else:
-        return jsonify({'message': 'El archivo subido no existe.'}), 404
+        return jsonify({'message': 'The uploaded file does not exist.'}), 404
 
 
 if __name__ == '__main__':
