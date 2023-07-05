@@ -18,6 +18,8 @@ El proyecto requiere tener instalado Python y las siguientes bibliotecas de Pyth
 - Flask
 - Werkzeug
 
+![Preview del compresor](https://user-images.githubusercontent.com/48457084/251190571-af4b8bda-f014-4b6b-b28e-7e525c2d55e0.png)
+
 ## Configuración
 
 1. Clona el repositorio o descarga los archivos del proyecto.
